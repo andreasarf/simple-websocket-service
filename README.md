@@ -10,6 +10,7 @@ A websocket service with STOMP protocol enhanced with Authentication and Authori
 3. RabbitMQ via Docker
     - Queue broker
     - STOMP broker
+4. Docker
 
 ## Topic Naming Convention
 
@@ -47,7 +48,6 @@ Since we use RabbitMQ as the broker, we need to follow the topic naming conventi
 1. Prepare the STOMP/SockJS client.
 2. Connect to `ws://localhost:8881/ws-connect` (adjust host and port if needed)
 3. Subscribe to one of the topics.
-    ```
 
 ## Security
 
