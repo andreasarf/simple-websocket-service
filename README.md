@@ -58,62 +58,60 @@ Since we use RabbitMQ as the broker, we need to follow the topic naming conventi
 
 ## Architecture Design
 
-```plantuml
-@startuml
-box Frontend #LightBlue
-participant WebApp as web
-end box
-box Backend #LightGreen
-queue "ws-broker" as wsq
-participant "websocket-router" as ws
-participant "rbac-service" as rbac
-queue "system-queue" as systemq
-participant "system-api" as system
-end box
-
-group connect
-web -> ws : Connect with Authorization header
-activate ws
-ws -> ws : Extract token
-ws -> rbac : Verify auth token
-
-alt token ok
-ws -> ws : Save session
-ws -> web : Accept connection
-else token nok
-ws -> web !! : Reject connection
-end
-end
-
-group subscribe
-web -> ws : Subscribe to a topic
-ws -> rbac : Get user data
-ws -> ws : Check authorization
-
-alt authz ok
-ws -> web : Accept subscription
-else auth nok
-ws -> web !! : Reject subscription
-end
-end
-
-group publish notification
-system -> system : Do some operation
-activate system
-system -> systemq : Publish notification
-activate systemq
-deactivate system
-systemq -> ws : Listen notification
-deactivate systemq
-ws -> ws : Build notification
-ws -> wsq : Publish WebSocket message
-activate wsq
-wsq -> web : Receive message
-deactivate wsq
-web -> web : Update data
-end
-
-@enduml
+```mermaid
+sequenceDiagram
+    participant web as WebApp
+    participant WsBroker@{ "type" : "queue" }
+    participant ws as websocket-router
+    participant rbac as rbac-service
+    participant SystemQ@{ "type" : "queue" }
+    participant system as system-api
+    
+    rect rgba(0, 0, 255, .1)
+        Note over web: connect
+        web ->> ws : Connect with Authorization header
+        activate ws
+        ws ->> ws : Extract token
+        ws ->> rbac : Verify auth token
+        
+        alt token ok
+            ws ->> ws : Save session
+            ws ->> web : Accept connection
+        else token nok
+            ws -x web : Reject connection
+        end
+    end
+    
+    rect rgba(0, 255, 255, .1)
+        Note over web: subscribe
+        web ->> ws : Subscribe to a topic
+        ws ->> rbac : Get user data
+        ws ->> ws : Check authorization
+        
+        alt authz ok
+            ws ->> web : Accept subscription
+        else auth nok
+            ws -x web : Reject subscription
+        end
+    end
+    
+    rect rgba(255, 0, 255, .1)
+        Note over web: publish notification
+        activate system
+        system ->> system : Do some operation
+        system ->> SystemQ : Publish notification
+        activate SystemQ
+        deactivate system
+        SystemQ ->> ws : Listen notification
+        deactivate SystemQ
+        ws ->> ws : Build notification
+        ws ->> WsBroker : Publish WebSocket message
+        activate WsBroker
+        WsBroker ->> web : Receive message
+        deactivate WsBroker
+        web ->> web : Update data
+        deactivate ws
+    end
 ```
 
 ## Testing
