@@ -29,6 +29,8 @@ Since we use RabbitMQ as the broker, we need to follow the topic naming conventi
     ```bash
     docker-compose up -d
     ```
+2. Start Mock server for RBAC
+    - Can use Mockoon, the config file can be found in [rbac.json](mockoon/rbac.json)
 
 ### Start Server
 

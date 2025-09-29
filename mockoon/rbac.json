@@ -1,0 +1,152 @@
+{
+  "uuid": "6c9da20b-9491-4654-835f-a5877827e1fa",
+  "lastMigration": 33,
+  "name": "Arcane",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 8882,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "a895122d-5402-4456-9d82-747b4c536d7d",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "api/v1/auth/authenticate",
+      "responses": [
+        {
+          "uuid": "ebf07714-41c7-4d27-9de9-470c15aea70d",
+          "body": "{\n  \"tenantId\": 461,\n  \"email\": \"john.doe@app.devorg\",\n  \"itemUuid\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "header",
+              "modifier": "authorization",
+              "value": "Bearer xyz1234==",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "header",
+              "modifier": "x-client-secret",
+              "value": "secret",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "07b06fb6-17a4-4959-bccb-a7de9ee30ca9",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/v1/user-data/461",
+      "responses": [
+        {
+          "uuid": "5a516da4-5487-4dad-9bc4-098a0e0e9db6",
+          "body": "{\n  \"tenantId\": 461,\n  \"account\": {\n    \"id\": 123,\n    \"email\": \"first.last@app.devorg\",\n    \"firstName\": \"First\",\n    \"lastName\": \"Last\"\n  },\n  \"entityItem\": {\n    \"itemUuid\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n    \"entityName\": \"CAMPAIGN\",\n    \"itemName\": \"first campaign\",\n    \"itemPath\": {\n      \"Brand\": {\n        \"id\": \"456f8b60-b6fd-46c1-968b-0e57cadf951a\",\n        \"lv\": 1\n      },\n      \"Topic\": {\n        \"id\": \"ab25c22f-b4da-4ec2-a1ca-1cf5e8d62c42\",\n        \"lv\": 7\n      },\n      \"Channel\": {\n        \"id\": \"9d2d3620-0f4a-462c-aac1-fe9c5f7ab63b\",\n        \"lv\": 8\n      },\n      \"Project\": {\n        \"id\": \"cdec4e42-d842-422b-8120-04cbbc4bf196\",\n        \"lv\": 4\n      },\n      \"Section\": {\n        \"id\": \"5d5191ec-50be-4929-b598-3e7dbb3707e0\",\n        \"lv\": 5\n      },\n      \"Version\": {\n        \"id\": \"e4d49d6e-53c8-bcc9-96e0-2354c84779f6\",\n        \"lv\": 9\n      },\n      \"Campaign\": {\n        \"id\": \"71c9a415-4930-4432-82d9-dfcda41a9d83\",\n        \"lv\": 3\n      },\n      \"Workspace\": {\n        \"id\": \"bf042b2c-8221-4580-af99-5731593b4de1\",\n        \"lv\": 2\n      },\n      \"SubSection\": {\n        \"id\": \"ee088ea4-9dab-40e0-982a-bca818342792\",\n        \"lv\": 6\n      }\n    },\n    \"itemProperties\": {\n      \"id\": \"2eb3ddd0-79b1-4111-8e2a-84df57fb8154\",\n      \"lv\": 10\n    }\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "header",
+              "modifier": "x-client-secret",
+              "value": "secret",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "a895122d-5402-4456-9d82-747b4c536d7d"
+    },
+    {
+      "type": "route",
+      "uuid": "07b06fb6-17a4-4959-bccb-a7de9ee30ca9"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}
