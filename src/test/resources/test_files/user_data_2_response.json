@@ -1,0 +1,56 @@
+{
+  "tenantId": 461,
+  "account": {
+    "id": 123,
+    "email": "john.doe@app.devorg",
+    "firstName": "John",
+    "lastName": "Doe"
+  },
+  "entityItem": {
+    "itemUuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "entityName": "CHANNEL",
+    "itemName": "AI Channel",
+    "itemPath": {
+      "Brand": {
+        "id": "456f8b60-b6fd-46c1-968b-0e57cadf951a",
+        "lv": 1
+      },
+      "Topic": {
+        "id": "ab25c22f-b4da-4ec2-a1ca-1cf5e8d62c42",
+        "lv": 7
+      },
+      "Option": {
+        "id": "0698f4ff-211e-4849-97c6-7ac9e11c0c9e",
+        "lv": 8
+      },
+      "Project": {
+        "id": "cdec4e42-d842-422b-8120-04cbbc4bf196",
+        "lv": 4
+      },
+      "Section": {
+        "id": "5d5191ec-50be-4929-b598-3e7dbb3707e0",
+        "lv": 5
+      },
+      "Version": {
+        "id": "e4d49d6e-53c8-bcc9-96e0-2354c84779f6",
+        "lv": 9
+      },
+      "Campaign": {
+        "id": "71c9a415-4930-4432-82d9-dfcda41a9d83",
+        "lv": 3
+      },
+      "Workspace": {
+        "id": "bf042b2c-8221-4580-af99-5731593b4de1",
+        "lv": 2
+      },
+      "SubSection": {
+        "id": "ee088ea4-9dab-40e0-982a-bca818342792",
+        "lv": 6
+      }
+    },
+    "itemProperties": {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "lv": 10
+    }
+  }
+}

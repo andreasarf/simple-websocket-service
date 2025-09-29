@@ -1,0 +1,23 @@
+server:
+  port: 58881
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%-5level){highlight} - %clr([%thread] [%X{traceId}] [%X{spanId}] [%X{sourceId}]){magenta} %clr(%logger{0}){cyan} : %msg %exception %nopex %n"
+  level:
+    dev.andreasarf: DEBUG
+
+app:
+  notification:
+    queue: app.notification
+  websocket:
+    broker:
+      localtest:
+        useSimple: true
+    cors:
+      allowedOrigins: '*'
+    auth:
+      enabled: true
+  rbac:
+    url: http://localhost:58882
+    clientSecret: secret
