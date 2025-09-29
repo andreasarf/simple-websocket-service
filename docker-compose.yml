@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: 'rabbitmq:3.8-management'
+    container_name: websocket-service
+    hostname: rabbit
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+      - "61613:61613"
+    volumes:
+      # Mount your enabled plugins file
+      - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
