@@ -1,0 +1,39 @@
+server:
+  port: 8881
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            logger-level: full
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%-5level){highlight} - %clr([%thread] [%X{traceId}] [%X{spanId}] [%X{sourceId}]){magenta} %clr(%logger{0}){cyan} : %msg %exception %nopex %n"
+  level:
+    dev.andreasarf: DEBUG
+    org:
+      springframework:
+        messaging: DEBUG
+        web:
+          socket: DEBUG
+
+app:
+  notification:
+    queue: app.notification
+  websocket:
+    broker:
+      localtest:
+        useSimple: false
+    cors:
+      allowedOrigins: '*'
+    auth:
+      enabled: true
+  rbac:
+    url: http://localhost:8882
+    clientSecret: secret

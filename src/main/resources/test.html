@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>STOMP WebSocket Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+<h1>WebSocket Test Page</h1>
+<p>Check the developer console (F12) for logs.</p>
+<button onclick="sendMessage()">Send Message to Server</button>
+
+<script type="text/javascript">
+    // --- CONFIGURATION ---
+    const serverUrl = 'http://localhost:8881/ws-connect'; // Your SockJS endpoint
+    const subscriptionTopic = '/topic/greetings';      // The topic to SUBSCRIBE to
+    const subscriptionTopic2 = '/topic/system.channel.9d2d3620-0f4a-462c-aac1-fe9c5f7ab63b';
+    const sendDestination = '/app/hello';              // The endpoint to SEND messages to
+    const headers = {'Authorization': 'Bearer xyz1234=='};
+
+    // --- SCRIPT LOGIC ---
+    console.log("Attempting to connect...");
+
+    const socket = new SockJS(serverUrl);
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect(headers, function (frame) {
+        console.log('✅ CONNECTED: ' + frame);
+
+        // 1. Subscribe to the hello topic
+        stompClient.subscribe(subscriptionTopic, function (response) {
+            // This function is called when a message is received on the topic
+            console.log('✅ MESSAGE RECEIVED:', response.body);
+        });
+        console.log(`✅ Subscribed to ${subscriptionTopic}`);
+
+        /**
+         * Send this message to RabbitMQ queue to trigger system message below.
+         * Can publish in the admin console: http://localhost:15672/#/queues/%2F/app.notification
+         * {
+         *   "channelUuid": "9d2d3620-0f4a-462c-aac1-fe9c5f7ab63b",
+         *   "action": "MESSAGE_CREATED",
+         *   "data": {
+         *     "message": "I am a message. Here is the reply."
+         *   }
+         * }
+         */
+        // 2. Subscribe to the specific topic
+        stompClient.subscribe(subscriptionTopic2, function (response) {
+            // This function is called when a message is received on the topic
+            console.log('✅ MESSAGE RECEIVED:', response.body);
+        });
+        console.log(`✅ Subscribed to ${subscriptionTopic2}`);
+
+    }, function (error) {
+        console.error('❌ CONNECTION ERROR: ' + error);
+    });
+
+    // Function to send a message to the server
+    function sendMessage() {
+        const message = "Hello from the test page!";
+        console.log(`➡️ Sending message to ${sendDestination}: ${message}`);
+        stompClient.send(sendDestination, {}, message);
+    }
+</script>
+</body>
+</html>
