@@ -4,11 +4,12 @@ import lombok.Builder;
 import lombok.Data;
 import dev.andreasarf.websocket.payload.rbac.AuthResponse;
 
+import java.security.Principal;
 import java.util.UUID;
 
 @Data
 @Builder
-public class UserDetailDto {
+public class UserDetailDto implements Principal {
 
     private Short tenantId;
     private UUID itemUuid;
@@ -22,5 +23,10 @@ public class UserDetailDto {
                 .email(response.getEmail())
                 .token(token)
                 .build();
+    }
+
+    @Override
+    public String getName() {
+        return email;
     }
 }
