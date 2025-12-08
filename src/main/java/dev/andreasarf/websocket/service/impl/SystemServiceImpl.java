@@ -26,6 +26,13 @@ public class SystemServiceImpl implements SystemService {
         log.debug("System message published to ws topic: {}", topic);
     }
 
+    @Override
+    public void publishUser(SystemMessage message) {
+        final var topic = getChannelTopic(message);
+        final var notificationMessage = getNotificationMessage(message);
+        simpMessagingTemplate.convertAndSendToUser(message.getUserEmail(), topic, notificationMessage);
+    }
+
     private String getChannelTopic(SystemMessage message) {
         return switch (message.getAction()) {
             case MESSAGE_CREATED,

@@ -14,6 +14,7 @@ public class SystemMessage implements Serializable {
 
     private Action action;
     private UUID channelUuid;
+    private String userEmail;
     private Object data;
 
     public enum Action {

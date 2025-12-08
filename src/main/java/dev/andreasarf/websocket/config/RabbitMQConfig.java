@@ -19,9 +19,17 @@ public class RabbitMQConfig {
     @Value("${app.notification.queue}")
     private String systemQueue;
 
+    @Value("${app.notification.user.queue}")
+    private String userSystemQueue;
+
     @Bean
     public Queue systemQueue() {
         return new Queue(systemQueue, true);
+    }
+
+    @Bean
+    public Queue userSystemQueue() {
+        return new Queue(userSystemQueue, true);
     }
 
     @Bean

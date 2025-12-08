@@ -26,6 +26,8 @@ logging:
 app:
   notification:
     queue: app.notification
+    user:
+      queue: app.user.notification
   websocket:
     broker:
       localtest:

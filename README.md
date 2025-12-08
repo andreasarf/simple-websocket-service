@@ -21,6 +21,7 @@ Since we use RabbitMQ as the broker, we need to follow the topic naming conventi
     - e.g. `/topic/system.channel.123`
 3. It has prefix names:
     - `/topic`: as broadcasting publisher
+    - `/user/topic`: as user-specific publisher
     - `/app`: as send entrypoint
 
 ## Start and Connect

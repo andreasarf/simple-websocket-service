@@ -20,10 +20,10 @@ public class SystemListener {
     private final SystemService systemService;
 
     @RabbitListener(queues = "${app.notification.queue}")
-    public void listenForReply(Message message, Channel channel) throws Exception {
+    public void listenForNotification(Message message, Channel channel) throws Exception {
         String body = new String(message.getBody());
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
-        log.info("Received system properties: {}, body: {}", message.getMessageProperties(), body);
+        log.info("Received system, properties: {}, body: {}", message.getMessageProperties(), body);
         try {
             final var systemMessage = objectMapper.readValue(body, SystemMessage.class);
             systemService.publish(systemMessage);
@@ -34,6 +34,25 @@ public class SystemListener {
             channel.basicNack(deliveryTag, false, false);
         } catch (Exception e) {
             log.error("Failed to process system, body: {}", body, e);
+            channel.basicNack(deliveryTag, false, false);
+        }
+    }
+
+    @RabbitListener(queues = "${app.notification.user.queue}")
+    public void listenForUserNotification(Message message, Channel channel) throws Exception {
+        String body = new String(message.getBody());
+        long deliveryTag = message.getMessageProperties().getDeliveryTag();
+        log.info("Received user system, properties: {}, body: {}", message.getMessageProperties(), body);
+        try {
+            final var systemMessage = objectMapper.readValue(body, SystemMessage.class);
+            systemService.publishUser(systemMessage);
+            channel.basicAck(deliveryTag, false);
+            log.info("Acked user system: {}", message);
+        } catch (JsonProcessingException e) {
+            log.error("Failed parse, body: {}", body, e);
+            channel.basicNack(deliveryTag, false, false);
+        } catch (Exception e) {
+            log.error("Failed to process user system, body: {}", body, e);
             channel.basicNack(deliveryTag, false, false);
         }
     }
