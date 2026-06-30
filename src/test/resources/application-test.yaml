@@ -20,6 +20,6 @@ app:
       allowedOrigins: '*'
     auth:
       enabled: false
-  rbac:
+  identity:
     url: http://localhost:8882
     clientSecret: secret

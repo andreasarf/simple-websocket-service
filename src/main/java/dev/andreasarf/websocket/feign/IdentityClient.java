@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import dev.andreasarf.websocket.common.AppHeaders;
-import dev.andreasarf.websocket.payload.rbac.AuthResponse;
-import dev.andreasarf.websocket.payload.rbac.UserDataResponse;
+import dev.andreasarf.websocket.payload.identity.AuthResponse;
+import dev.andreasarf.websocket.payload.identity.UserDataResponse;
 
 import java.util.UUID;
 
-@FeignClient(name = "rbac-service", url = "${app.rbac.url}")
-public interface RbacClient {
+@FeignClient(name = "identity-service", url = "${app.identity.url}")
+public interface IdentityClient {
 
     @PostMapping(value = "/api/v1/auth/authenticate")
     AuthResponse authenticateSignature(@RequestHeader(AppHeaders.AUTHORIZATION) String token,

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import dev.andreasarf.websocket.dto.UserDetailDto;
-import dev.andreasarf.websocket.feign.RbacClient;
+import dev.andreasarf.websocket.feign.IdentityClient;
 import dev.andreasarf.websocket.service.AuthorizationService;
 import dev.andreasarf.websocket.util.TopicTemplate;
 
@@ -17,20 +17,20 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     private static final String BEARER = "Bearer ";
 
-    private final RbacClient rbacClient;
+    private final IdentityClient identityClient;
 
-    @Value("${app.rbac.clientSecret}")
+    @Value("${app.identity.clientSecret}")
     private String clientSecret;
 
     @Override
     public UserDetailDto authenticateSignature(String token) {
-        final var authResponse = rbacClient.authenticateSignature(BEARER + token, clientSecret);
+        final var authResponse = identityClient.authenticateSignature(BEARER + token, clientSecret);
         return UserDetailDto.of(authResponse, token);
     }
 
     @Override
     public boolean isAuthorized(UserDetailDto userDetail, String topic) {
-        final var userData = rbacClient.getUserData(userDetail.getTenantId(), userDetail.getEmail(),
+        final var userData = identityClient.getUserData(userDetail.getTenantId(), userDetail.getEmail(),
                 userDetail.getItemUuid(), clientSecret);
         final var parameters = TopicTemplate.extractParams(topic);
         boolean isAuthorized = parameters.isMatched();

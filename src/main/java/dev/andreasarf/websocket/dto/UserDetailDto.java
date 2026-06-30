@@ -2,7 +2,7 @@ package dev.andreasarf.websocket.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import dev.andreasarf.websocket.payload.rbac.AuthResponse;
+import dev.andreasarf.websocket.payload.identity.AuthResponse;
 
 import java.security.Principal;
 import java.util.UUID;
