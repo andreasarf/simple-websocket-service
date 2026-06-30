@@ -27,8 +27,8 @@ import org.wiremock.spring.EnableWireMock;
 import org.wiremock.spring.InjectWireMock;
 import dev.andreasarf.websocket.config.AsyncTestConfig;
 import dev.andreasarf.websocket.config.RabbitTestConfig;
-import dev.andreasarf.websocket.payload.rbac.AuthResponse;
-import dev.andreasarf.websocket.payload.rbac.UserDataResponse;
+import dev.andreasarf.websocket.payload.identity.AuthResponse;
+import dev.andreasarf.websocket.payload.identity.UserDataResponse;
 import dev.andreasarf.websocket.util.FileTestUtils;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 @ActiveProfiles("wstest")
 @EnableWireMock({
         @ConfigureWireMock(
-                name = "rbac-service",
+                name = "identity-service",
                 port = 58882)
 })
 @Import({RabbitTestConfig.class, AsyncTestConfig.class})
@@ -58,8 +58,8 @@ public abstract class BaseWebSocketTest {
     protected static final String TOKEN = "token_" + UUID.randomUUID();
     protected static final UUID CHANNEL_UUID = UUID.fromString("0698f4ff-211e-4849-97c6-7ac9e11c0c9e");
     protected static final UUID CHANNEL_UUID_2 = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-    protected static final String RBAC_AUTH_PATH = "/api/v1/auth/authenticate";
-    protected static final String RBAC_USER_DATA_PATH = "/api/v1/user-data/";
+    protected static final String IDENTITY_AUTH_PATH = "/api/v1/auth/authenticate";
+    protected static final String IDENTITY_USER_DATA_PATH = "/api/v1/user-data/";
 
     protected BlockingQueue<Object> blockingQueue;
     protected WebSocketStompClient stompClient;
@@ -79,13 +79,13 @@ public abstract class BaseWebSocketTest {
     @MockitoSpyBean
     protected SimpMessagingTemplate simpMessagingTemplate;
 
-    @Value("${app.rbac.clientSecret}")
+    @Value("${app.identity.clientSecret}")
     protected String clientSecret;
     @Value("${app.notification.queue}")
     protected String systemQueueName;
 
-    @InjectWireMock("rbac-service")
-    protected WireMockServer rbacWireMockServer;
+    @InjectWireMock("identity-service")
+    protected WireMockServer identityWireMockServer;
 
     @BeforeEach
     public void setup() {
@@ -110,10 +110,10 @@ public abstract class BaseWebSocketTest {
         }
     }
 
-    protected AuthResponse arrangeRbacAuth() throws IOException {
+    protected AuthResponse arrangeIdentityAuth() throws IOException {
         final var authResponseJson = FileTestUtils.readFileToString("test_files/auth_response.json");
         final var authResponse = objectMapper.readValue(authResponseJson, AuthResponse.class);
-        rbacWireMockServer.stubFor(post(urlPathEqualTo(RBAC_AUTH_PATH))
+        identityWireMockServer.stubFor(post(urlPathEqualTo(IDENTITY_AUTH_PATH))
                 .withHeader(AppHeaders.AUTHORIZATION, equalTo("Bearer " + TOKEN))
                 .withHeader(AppHeaders.X_INTERNAL_SECRET, equalTo(clientSecret))
                 .willReturn(aResponse()
@@ -123,14 +123,14 @@ public abstract class BaseWebSocketTest {
         return authResponse;
     }
 
-    protected UserDataResponse arrangeRbacUserData(AuthResponse authResponse) throws IOException {
-        return arrangeRbacUserData(authResponse, "test_files/user_data_response.json");
+    protected UserDataResponse arrangeIdentityUserData(AuthResponse authResponse) throws IOException {
+        return arrangeIdentityUserData(authResponse, "test_files/user_data_response.json");
     }
 
-    protected UserDataResponse arrangeRbacUserData(AuthResponse authResponse, String userDataFile) throws IOException {
+    protected UserDataResponse arrangeIdentityUserData(AuthResponse authResponse, String userDataFile) throws IOException {
         final var userDataJson = FileTestUtils.readFileToString(userDataFile);
         final var userData = objectMapper.readValue(userDataJson, UserDataResponse.class);
-        rbacWireMockServer.stubFor(get(urlPathEqualTo(RBAC_USER_DATA_PATH + authResponse.getTenantId()))
+        identityWireMockServer.stubFor(get(urlPathEqualTo(IDENTITY_USER_DATA_PATH + authResponse.getTenantId()))
                 .withHeader(AppHeaders.X_INTERNAL_SECRET, equalTo(clientSecret))
                 .withQueryParam("email", equalTo(authResponse.getEmail()))
                 .withQueryParam("itemUuid", equalTo(authResponse.getItemUuid().toString()))

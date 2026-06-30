@@ -49,8 +49,8 @@ public class WebSocketSubscriptionTest extends BaseWebSocketTest {
         final var topic = TopicTemplate.expand(WebSocketTopics.CHANNEL_TOPIC, channelUuid);
         final var connectHeaders = new StompHeaders();
         connectHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN);
-        final var authResponse = arrangeRbacAuth();
-        final var userData = arrangeRbacUserData(authResponse);
+        final var authResponse = arrangeIdentityAuth();
+        final var userData = arrangeIdentityUserData(authResponse);
         final var system = SystemMessage.builder()
                 .channelUuid(channelUuid)
                 .action(SystemMessage.Action.MESSAGE_CREATED)
@@ -79,8 +79,8 @@ public class WebSocketSubscriptionTest extends BaseWebSocketTest {
         testTemplate.convertAndSend(systemQueueName, system);
 
         // assert
-        rbacWireMockServer.verify(1, postRequestedFor(urlPathEqualTo(RBAC_AUTH_PATH)));
-        rbacWireMockServer.verify(1, getRequestedFor(urlPathTemplate(RBAC_USER_DATA_PATH + "{tenantId}")));
+        identityWireMockServer.verify(1, postRequestedFor(urlPathEqualTo(IDENTITY_AUTH_PATH)));
+        identityWireMockServer.verify(1, getRequestedFor(urlPathTemplate(IDENTITY_USER_DATA_PATH + "{tenantId}")));
         verify(simpMessagingTemplate).convertAndSend(eq(topic), any(NotificationMessage.class));
         final var actualNotification = (NotificationMessage) blockingQueue.poll(1, TimeUnit.SECONDS);
         assertThat(actualNotification)
@@ -98,8 +98,8 @@ public class WebSocketSubscriptionTest extends BaseWebSocketTest {
         final var topic = TopicTemplate.expand(WebSocketTopics.CHANNEL_TOPIC, channelUuid);
         final var connectHeaders = new StompHeaders();
         connectHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN);
-        final var authResponse = arrangeRbacAuth();
-        final var userData = arrangeRbacUserData(authResponse, "test_files/user_data_2_response.json");
+        final var authResponse = arrangeIdentityAuth();
+        final var userData = arrangeIdentityUserData(authResponse, "test_files/user_data_2_response.json");
         final var system = SystemMessage.builder()
                 .channelUuid(channelUuid)
                 .action(SystemMessage.Action.MESSAGE_CREATED)
@@ -128,8 +128,8 @@ public class WebSocketSubscriptionTest extends BaseWebSocketTest {
         testTemplate.convertAndSend(systemQueueName, system);
 
         // assert
-        rbacWireMockServer.verify(1, postRequestedFor(urlPathEqualTo(RBAC_AUTH_PATH)));
-        rbacWireMockServer.verify(1, getRequestedFor(urlPathTemplate(RBAC_USER_DATA_PATH + "{tenantId}")));
+        identityWireMockServer.verify(1, postRequestedFor(urlPathEqualTo(IDENTITY_AUTH_PATH)));
+        identityWireMockServer.verify(1, getRequestedFor(urlPathTemplate(IDENTITY_USER_DATA_PATH + "{tenantId}")));
         verify(simpMessagingTemplate).convertAndSend(eq(topic), any(NotificationMessage.class));
         final var actualNotification = (NotificationMessage) blockingQueue.poll(1, TimeUnit.SECONDS);
         assertThat(actualNotification)
@@ -148,8 +148,8 @@ public class WebSocketSubscriptionTest extends BaseWebSocketTest {
         final var topic = TopicTemplate.expand(WebSocketTopics.CHANNEL_TOPIC, channelUuid);
         final var connectHeaders = new StompHeaders();
         connectHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-        final var authResponse = arrangeRbacAuth();
-        final var userData = arrangeRbacUserData(authResponse);
+        final var authResponse = arrangeIdentityAuth();
+        final var userData = arrangeIdentityUserData(authResponse);
         final var system = SystemMessage.builder()
                 .channelUuid(channelUuid)
                 .action(SystemMessage.Action.MESSAGE_CREATED)
@@ -171,8 +171,8 @@ public class WebSocketSubscriptionTest extends BaseWebSocketTest {
         testTemplate.convertAndSend(systemQueueName, system);
 
         // assert
-        rbacWireMockServer.verify(1, postRequestedFor(urlPathEqualTo(RBAC_AUTH_PATH)));
-        rbacWireMockServer.verify(0, getRequestedFor(urlPathTemplate(RBAC_USER_DATA_PATH + "{tenantId}")));
+        identityWireMockServer.verify(1, postRequestedFor(urlPathEqualTo(IDENTITY_AUTH_PATH)));
+        identityWireMockServer.verify(0, getRequestedFor(urlPathTemplate(IDENTITY_USER_DATA_PATH + "{tenantId}")));
         verify(simpMessagingTemplate).convertAndSend(eq(topic), any(NotificationMessage.class));
         final var actualNotification = (NotificationMessage) blockingQueue.poll(1, TimeUnit.SECONDS);
         assertNull(actualNotification);
@@ -185,8 +185,8 @@ public class WebSocketSubscriptionTest extends BaseWebSocketTest {
         final var topic = TopicTemplate.expand(WebSocketTopics.CHANNEL_TOPIC, channelUuid);
         final var connectHeaders = new StompHeaders();
         connectHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN);
-        final var authResponse = arrangeRbacAuth();
-        final var userData = arrangeRbacUserData(authResponse);
+        final var authResponse = arrangeIdentityAuth();
+        final var userData = arrangeIdentityUserData(authResponse);
         final var system = SystemMessage.builder()
                 .channelUuid(channelUuid)
                 .action(SystemMessage.Action.MESSAGE_CREATED)
@@ -208,8 +208,8 @@ public class WebSocketSubscriptionTest extends BaseWebSocketTest {
         testTemplate.convertAndSend(systemQueueName, system);
 
         // assert
-        rbacWireMockServer.verify(1, postRequestedFor(urlPathEqualTo(RBAC_AUTH_PATH)));
-        rbacWireMockServer.verify(1, getRequestedFor(urlPathTemplate(RBAC_USER_DATA_PATH + "{tenantId}")));
+        identityWireMockServer.verify(1, postRequestedFor(urlPathEqualTo(IDENTITY_AUTH_PATH)));
+        identityWireMockServer.verify(1, getRequestedFor(urlPathTemplate(IDENTITY_USER_DATA_PATH + "{tenantId}")));
         verify(simpMessagingTemplate).convertAndSend(eq(topic), any(NotificationMessage.class));
         final var actualNotification = (NotificationMessage) blockingQueue.poll(1, TimeUnit.SECONDS);
         assertNull(actualNotification);

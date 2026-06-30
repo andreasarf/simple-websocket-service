@@ -1,4 +1,4 @@
-package dev.andreasarf.websocket.payload.rbac;
+package dev.andreasarf.websocket.payload.identity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

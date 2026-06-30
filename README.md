@@ -31,8 +31,8 @@ Since we use RabbitMQ as the broker, we need to follow the topic naming conventi
     ```bash
     docker-compose up -d
     ```
-2. Start Mock server for RBAC
-    - Can use Mockoon, the config file can be found in [rbac.json](mockoon/rbac.json)
+2. Start Mock server for Identity service
+    - Can use Mockoon, the config file can be found in [identity.json](mockoon/identity.json)
 
 ### Start Server
 
@@ -52,9 +52,9 @@ Since we use RabbitMQ as the broker, we need to follow the topic naming conventi
 
 ## Security
 
-1. Use token from RBAC to authenticate on `CONNECT` command. It, then, save the session for subsequent commands.
+1. Use token from Identity service to authenticate on `CONNECT` command. It, then, save the session for subsequent commands.
     - Put `Authorization: Bearer <token>` on STOMP header.
-2. On `SUBSCRIBE` command, it will authorize by checking topic/destination URI against itemPath from RBAC.
+2. On `SUBSCRIBE` command, it will authorize by checking topic/destination URI against itemPath from Identity service.
 3. In general, this layer can toggled by properties `app.websocket.auth.enabled`.
 
 ## Architecture Design
@@ -64,7 +64,7 @@ sequenceDiagram
     participant web as WebApp
     participant WsBroker@{ "type" : "queue" }
     participant ws as websocket-router
-    participant rbac as rbac-service
+    participant identity as identity-service
     participant SystemQ@{ "type" : "queue" }
     participant system as system-api
     
@@ -73,7 +73,7 @@ sequenceDiagram
         web ->> ws : Connect with Authorization header
         activate ws
         ws ->> ws : Extract token
-        ws ->> rbac : Verify auth token
+        ws ->> identity : Verify auth token
         
         alt token ok
             ws ->> ws : Save session
@@ -86,7 +86,7 @@ sequenceDiagram
     rect rgba(0, 255, 255, .1)
         Note over web: subscribe
         web ->> ws : Subscribe to a topic
-        ws ->> rbac : Get user data
+        ws ->> identity : Get user data
         ws ->> ws : Check authorization
         
         alt authz ok
