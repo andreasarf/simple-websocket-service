@@ -26,7 +26,7 @@ jobs:
         run: ./mvnw -B clean test
 
       - name: Generate JaCoCo badge
-        uses: cicirello/jacoco-badge-generator@f33476a5a3fd5a4f77cb5eef2ebe728c1dd5b921 # v2.11.0
+        uses: cicirello/jacoco-badge-generator@72266185b7ee48a6fd74eaf0238395cc8b14fef8 # v2.12.1
         with:
           generate-branches-badge: true
           jacoco-csv-file: target/site/jacoco/jacoco.csv
