@@ -1,5 +1,9 @@
 # Simple Websocket Service
 
+![CI](https://github.com/andreasarf/simple-websocket-service/actions/workflows/ci.yml/badge.svg)
+![Coverage](.github/badges/jacoco.svg)
+![Branches](.github/badges/branches.svg)
+
 A websocket service with STOMP protocol enhanced with Authentication and Authorization layer.
 
 ## Tech Stacks
